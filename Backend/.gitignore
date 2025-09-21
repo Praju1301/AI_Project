@@ -1,0 +1,11 @@
+# Dependencies folder installed by npm
+/node_modules
+
+# The file containing all secret environment variables
+.env
+
+# A temporary folder created by Multer to store audio file uploads
+/uploads
+
+# The Google Cloud credentials file containing private keys
+credentials.json

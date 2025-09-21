@@ -1,0 +1,97 @@
+/* src/styles.css */
+
+/* Define a modern color palette using CSS variables */
+:root {
+    --background-dark: #121212;
+    --primary-accent: #BB86FC;
+    --primary-accent-dark: #3700B3;
+    --secondary-accent: #03DAC6;
+    --surface-color: #1E1E1E;
+    --text-primary: #FFFFFF;
+    --text-secondary: #B3B3B3;
+    --error-color: #CF6679;
+}
+
+/* Global Body Styles */
+body {
+    margin: 0;
+    background-color: var(--background-dark);
+    color: var(--text-primary);
+    font-family: 'Poppins', sans-serif; /* <-- Apply the new font */
+}
+
+/* Main App Container */
+.App {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
+
+/* Shared Form Styles */
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: 100%;
+}
+
+form label {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+form input, form select {
+    padding: 12px;
+    font-size: 1rem;
+    border-radius: 8px;
+    border: 1px solid #333;
+    background-color: var(--surface-color);
+    color: var(--text-primary);
+}
+
+/* Shared Button Styles */
+button {
+    padding: 12px 20px;
+    font-size: 1rem;
+    font-weight: 500;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    background-color: var(--primary-accent);
+    color: var(--background-dark);
+    transition: background-color 0.3s ease, transform 0.1s ease;
+}
+
+button:hover {
+    background-color: var(--secondary-accent);
+}
+
+button:active {
+    transform: scale(0.98);
+}
+
+button:disabled {
+    background-color: #444;
+    color: #888;
+    cursor: not-allowed;
+}
+
+/* Link Styles */
+a {
+    color: var(--primary-accent);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+a:hover {
+    text-decoration: underline;
+    color: var(--secondary-accent);
+}
+
+/* Card Style for Dashboard */
+.card {
+    background: var(--surface-color);
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
