@@ -1,8 +1,20 @@
-// src/VisualFeedback.js
+// src/components/shared/VisualFeedback.js
 import React from 'react';
-import './VisualFeedback.css'; // We will create this CSS file next for animations
+import './VisualFeedback.css'; 
 
-const VisualFeedback = ({ status, responseText }) => {
+const VisualFeedback = ({ status, responseText, emotion }) => { // Accept emotion as a prop
+
+    const getEmotionIcon = () => {
+        switch (emotion?.toLowerCase()) {
+            case 'happy': return '😄';
+            case 'sad': return '😢';
+            case 'angry': return '😠';
+            case 'neutral': return '😐';
+            case 'surprise': return '😮';
+            default: return '😊'; // Default for speaking
+        }
+    };
+
     const getFeedbackContent = () => {
         switch (status) {
             case 'recording':
@@ -19,7 +31,7 @@ const VisualFeedback = ({ status, responseText }) => {
                 };
             case 'speaking':
                  return {
-                    icon: '😊',
+                    icon: getEmotionIcon(), // This will now work correctly
                     text: responseText,
                     className: 'speaking'
                 };

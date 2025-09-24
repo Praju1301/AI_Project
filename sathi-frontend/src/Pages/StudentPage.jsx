@@ -13,6 +13,7 @@ const StudentPage = () => {
     const [tasks, setTasks] = useState([]);
     const [userProfile, setUserProfile] = useState(null);
     const [notifiedIds, setNotifiedIds] = useState(new Set());
+    const [detectedEmotion, setDetectedEmotion] = useState(null); // New state for emotion
 
     const mediaRecorder = useRef(null);
     const audioChunks = useRef([]);
@@ -45,8 +46,7 @@ const StudentPage = () => {
             socket.on('new_task', (task) => {
                 const notificationText = `New task assigned: ${task.title}`;
                 toast.info(notificationText);
-                // --- CHANGE 1: Add voice notification for new tasks ---
-                speak(notificationText); 
+                speak(notificationText);
             });
 
             return () => socket.disconnect();
@@ -56,8 +56,7 @@ const StudentPage = () => {
     useEffect(() => {
         const checkUpcomingEvents = () => {
             const now = new Date();
-            // --- CHANGE 2: Change time limit from 15 minutes to 5 minutes ---
-            const upcomingTimeLimit = new Date(now.getTime() + 5 * 60000); 
+            const upcomingTimeLimit = new Date(now.getTime() + 5 * 60000);
 
             const allEvents = [
                 ...routine.map(item => ({ id: item._id || item.name, title: item.name, time: item.startTime })),
@@ -103,14 +102,18 @@ const StudentPage = () => {
 
                 try {
                     const response = await processInteraction(audioBlob);
-                    const { textResponse, audioResponse } = response.data;
+                    const { textResponse, audioResponse, detectedEmotion } = response.data;
                     
                     setResponseText(textResponse);
+                    setDetectedEmotion(detectedEmotion); // Set the emotion state
                     setStatus('speaking');
                     
                     const audio = new Audio(`data:audio/wav;base64,${audioResponse}`);
                     audio.play();
-                    audio.onended = () => setStatus('idle');
+                    audio.onended = () => {
+                        setStatus('idle');
+                        setDetectedEmotion(null); // Reset emotion after speaking
+                    };
 
                 } catch (error) {
                     console.error("Error processing interaction:", error);
@@ -155,7 +158,7 @@ const StudentPage = () => {
             <ToastContainer position="top-right" autoClose={5000} hideProgressBar={false} />
             <div style={{ display: 'flex', height: '80vh' }}>
                 <div style={{ flex: 2, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', padding: '20px' }}>
-                    <VisualFeedback status={status} responseText={responseText} />
+                    <VisualFeedback status={status} responseText={responseText} emotion={detectedEmotion} />
                     <button onClick={buttonState.action} disabled={buttonState.disabled}>
                         {buttonState.text}
                     </button>

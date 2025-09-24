@@ -2,7 +2,8 @@
 import { google } from 'googleapis';
 import { JWT } from 'google-auth-library';
 import fs from 'fs';
-
+import dotenv from 'dotenv';
+dotenv.config();
 const getCalendar = () => {
     // Check if the credentials file exists before trying to read it
     if (!process.env.GOOGLE_APPLICATION_CREDENTIALS || !fs.existsSync(process.env.GOOGLE_APPLICATION_CREDENTIALS)) {

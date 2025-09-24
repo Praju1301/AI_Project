@@ -1,5 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
+import {
+    LineChart,
+    Line,
+    XAxis,
+    YAxis,
+    CartesianGrid,
+    Tooltip,
+    Legend,
+    ResponsiveContainer,
+    PieChart,
+    Pie,
+    Cell
+} from 'recharts';
 import { getProgressAnalytics, getTopicAnalytics } from '../api/api.js';
 import HistoryLog from '../components/caregiver/HistoryLog.js';
 import StudentManager from '../components/caregiver/StudentManager.js';
@@ -20,9 +32,16 @@ const DashboardPage = () => {
                     getTopicAnalytics()
                 ]);
                 setAnalytics(analyticsRes.data);
+
+                // --- START OF FIX ---
+                // The API already returns the data in the correct { name, value } format.
+                // No need to map or reformat it here.
                 setTopicData(topicsRes.data);
+                // --- END OF FIX ---
+
             } catch (err) {
                 setError('Failed to fetch dashboard data.');
+                console.error(err);
             } finally {
                 setLoading(false);
             }
@@ -43,19 +62,32 @@ const DashboardPage = () => {
                     <h3>Total Interactions</h3>
                     <p style={{ fontSize: '2.5rem', fontWeight: 'bold' }}>{analytics?.totalInteractions || 0}</p>
                 </div>
+
                 <div className="card">
                     <h3>Emotion Distribution</h3>
                     <ResponsiveContainer width="100%" height={300}>
-                        <BarChart data={analytics?.emotionDistribution}>
-                            <CartesianGrid strokeDasharray="3 3" />
-                            <XAxis dataKey="emotion" />
-                            <YAxis />
+                        <PieChart>
+                            <Pie
+                                data={analytics?.emotionDistribution}
+                                cx="50%"
+                                cy="50%"
+                                labelLine={false}
+                                outerRadius={80}
+                                fill="#8884d8"
+                                dataKey="count"
+                                nameKey="emotion"
+                                label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+                            >
+                                {analytics?.emotionDistribution.map((entry, index) => (
+                                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                                ))}
+                            </Pie>
                             <Tooltip />
                             <Legend />
-                            <Bar dataKey="count" fill="#8884d8" />
-                        </BarChart>
+                        </PieChart>
                     </ResponsiveContainer>
                 </div>
+
                 <div className="card">
                     <h3>Interaction Trend</h3>
                     <ResponsiveContainer width="100%" height={300}>
@@ -69,10 +101,12 @@ const DashboardPage = () => {
                         </LineChart>
                     </ResponsiveContainer>
                 </div>
+
                 <div className="card">
                     <h3>Conversation Topics</h3>
                     <ResponsiveContainer width="100%" height={300}>
                         <PieChart>
+                            {/* This component is now correct because topicData has the right shape */}
                             <Pie data={topicData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={80} fill="#8884d8" label>
                                 {topicData.map((entry, index) => <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />)}
                             </Pie>
