@@ -13,7 +13,7 @@ export async function generateTextResponse(transcribedText, detectedEmotion, cal
         return { responseText: "I'm here to listen.", topic: "General" };
     }
 
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+    const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash-lite" });
 
     const prompt = `
         You are "Sathi," an empathetic voice assistant for a teenager with Down syndrome.

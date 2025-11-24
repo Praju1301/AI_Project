@@ -3,7 +3,8 @@ import axios from 'axios';
 import fs from 'fs';
 
 // The specific URL for the Whisper model on the Hugging Face Inference API
-const API_URL = "https://api-inference.huggingface.co/models/openai/whisper-large-v3";
+// FIX APPLIED: Using the correct path for the Hugging Face Inference Router (hf-inference/models)
+const API_URL = "https://router.huggingface.co/hf-inference/models/openai/whisper-large-v3";
 
 /**
  * Transcribes an audio file into text using the Hugging Face Inference API.
